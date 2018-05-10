@@ -3,7 +3,7 @@
 var Web3 = require('web3')
 
 // Get metamask network
-function getNetwork() {
+function dial () {
   let web3js = window.web3
   if (typeof window.web3 !== 'undefined') {
     web3js = new Web3(web3js.currentProvider)
@@ -12,9 +12,9 @@ function getNetwork() {
 }
 
 // Get network id
-async function getNetworkInfo () {
+async function getNetworkStatus () {
   // Get network
-  let web3js = getNetwork()
+  let web3js = dial()
   // Get network id
   const networkId = await web3js.eth.net.getId()
 
@@ -49,10 +49,10 @@ async function getNetworkInfo () {
 // Get metamask accounts
 async function getAccount () {
   // Get network
-  let web3js = getNetwork()
+  let web3js = dial()
   // Get accounts
   const accounts = await web3js.eth.getAccounts()
-  if (typeof accounts != 'undefined' && accounts.length >= 0) {
+  if (typeof accounts !== 'undefined' && accounts.length >= 0) {
     return accounts[0]
   }
   return null
@@ -61,7 +61,7 @@ async function getAccount () {
 // Get metamask accounts
 async function getAccounts () {
   // Get network
-  let web3js = getNetwork()
+  let web3js = dial()
   // Get accounts
   const accounts = await web3js.eth.getAccounts()
   return accounts
@@ -70,10 +70,10 @@ async function getAccounts () {
 // Check metamask network
 async function checkNetwork () {
   // Get network
-  let web3js = getNetwork()
+  let web3js = dial()
 
   // Check if Metamask installed
-  if (typeof web3 === 'undefined') {
+  if (typeof web3js === 'undefined') {
     // Response
     return {
       status: 'error',
@@ -83,7 +83,7 @@ async function checkNetwork () {
   // Get accounts
   const account = await getAccount()
   // Get network
-  const network = await getNetworkInfo()
+  const network = await getNetworkStatus()
 
   // Response
   if (account && network) {
@@ -107,7 +107,7 @@ async function checkNetwork () {
 }
 
 export default {
-  getNetworkInfo,
+  getNetworkStatus,
   getAccount,
   getAccounts,
   checkNetwork
