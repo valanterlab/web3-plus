@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "keywords": [
+    "Ethereum", "web3", "Metamask"
+  ],
+  "author": "Raphael Pralat <raphael@valanter.com> (https://valanter.com)",
   "license": "ISC"
 }
