@@ -3,7 +3,7 @@
 var Web3 = require('web3')
 
 // Get metamask network
-function dial () {
+function getNetwork() {
   let web3js = window.web3
   if (typeof window.web3 !== 'undefined') {
     web3js = new Web3(web3js.currentProvider)
@@ -12,9 +12,9 @@ function dial () {
 }
 
 // Get network id
-async function getNetworkStatus () {
+async function getNetworkInfo () {
   // Get network
-  let web3js = dial()
+  let web3js = getNetwork()
   // Get network id
   const networkId = await web3js.eth.net.getId()
 
@@ -49,10 +49,10 @@ async function getNetworkStatus () {
 // Get metamask accounts
 async function getAccount () {
   // Get network
-  let web3js = dial()
+  let web3js = getNetwork()
   // Get accounts
   const accounts = await web3js.eth.getAccounts()
-  if (typeof accounts !== 'undefined' && accounts.length >= 0) {
+  if (typeof accounts != 'undefined' && accounts.length >= 0) {
     return accounts[0]
   }
   return null
@@ -61,7 +61,7 @@ async function getAccount () {
 // Get metamask accounts
 async function getAccounts () {
   // Get network
-  let web3js = dial()
+  let web3js = getNetwork()
   // Get accounts
   const accounts = await web3js.eth.getAccounts()
   return accounts
@@ -70,32 +70,38 @@ async function getAccounts () {
 // Check metamask network
 async function checkNetwork () {
   // Get network
-  let web3js = dial()
+  let web3js = getNetwork()
 
   // Check if Metamask installed
-  if (typeof web3js === 'undefined') {
+  if (typeof web3 === 'undefined') {
     // Response
     return {
       status: 'error',
       message: 'NOT_INSTALLED'}
   }
 
+  // Get network
+  const network = await getNetworkInfo()
+  if (!network) {
+    return {status: 'error',
+      message: 'NETWORK_ERROR'
+    }
+  }
+
   // Get accounts
   const account = await getAccount()
-  // Get network
-  const network = await getNetworkStatus()
+  if (!account) {
+    // Response
+    return {status: 'error',
+      message: 'NOT_LOGGED_IN',
+      networkId: network.networkId,
+      networkName: network.networkName
+    }
+  }
+
 
   // Response
   if (account && network) {
-    // Check log in
-    if (account == null) {
-      // Response
-      return {status: 'error',
-        message: 'NOT_LOGGED_IN',
-        networkId: network.networkId,
-        networkName: network.networkName
-      }
-    }
     // Response
     return {status: 'success',
       message: 'CONNECTED',
@@ -104,10 +110,15 @@ async function checkNetwork () {
       networkName: network.networkName
     }
   }
+
+  // Response
+  return {status: 'error',
+    message: 'UNKOWN_CONNECTED'
+  }
 }
 
 export default {
-  getNetworkStatus,
+  getNetworkInfo,
   getAccount,
   getAccounts,
   checkNetwork

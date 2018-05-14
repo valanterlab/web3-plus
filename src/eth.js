@@ -13,6 +13,10 @@ function setNodeUrl (url) {
 function dial (url) {
   web3.setProvider(nodeUrl)
 }
+
+function tescbt (test) {
+    console.log(test)
+}
 // Get node info
 async function getNodeInfo () {
   dial()
@@ -23,6 +27,12 @@ async function getNodeInfo () {
   const peersNumber = await web3.eth.net.getPeerCount()
   // const hashrate = await web3.eth.getHashrate()
   const gasPrice = await web3.eth.getGasPrice()
+
+  web3.eth.subscribe('pendingTransactions', function(id) {
+    console.log(id)
+  })
+
+
 
   // let test = await web3.eth.getBlock(web3.eth.blockNumber)
 
