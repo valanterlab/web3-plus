@@ -1,6 +1,6 @@
 {
   "name": "web3-plus",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Ethereum Web3 Tools",
   "main": "src/index.js",
   "scripts": {
